@@ -342,12 +342,12 @@ Commands used, in order:
   and run this; the app's /predict works instantly since the trained
   model is baked in, no MongoDB needed unless they hit /train):
     docker login
-    docker tag networksecurity:local <dockerhub-username>/networksecurity:latest
-    docker push <dockerhub-username>/networksecurity:latest
+    docker tag networksecurity:local chikati/networksecurity:latest
+    docker push chikati/networksecurity:latest
 
   Anyone can then run it with zero setup:
-    docker pull <dockerhub-username>/networksecurity:latest
-    docker run -p 8000:8000 <dockerhub-username>/networksecurity:latest
+    docker pull chikati/networksecurity:latest
+    docker run -p 8000:8000 chikati/networksecurity:latest
 
 CMD vs ENTRYPOINT: CMD (what we use) is a default that
 `docker run image <other-command>` can override entirely.
@@ -367,7 +367,44 @@ its keep when you're orchestrating 2+ containers together.
 
 
 ----------------------------------------------------------------
-11. NOT YET DONE (planned next, time permitting)
+11. GITHUB REPO
+----------------------------------------------------------------
+Repo: https://github.com/Abhijit26918/Netsec.git (same URL as the
+original 2-year-old project's README — reused so the link stays
+the same, repo was empty so this was a plain push, not a force-push
+over old history).
+
+One-time setup done locally:
+    git remote add origin https://github.com/Abhijit26918/Netsec.git
+    git add -A
+    git commit -m "..."
+
+To push (run yourself — needs your own GitHub auth):
+    git branch -M main
+    git push -u origin main
+
+If prompted for credentials: GitHub deprecated password auth over
+HTTPS. Use a Personal Access Token as the password instead
+(GitHub -> Settings -> Developer settings -> Personal access tokens
+-> generate one with "repo" scope). Windows' Git Credential Manager
+caches this after the first successful push, so you won't be asked
+again on this machine.
+
+What's tracked vs not: .gitignore excludes venv/, __pycache__/,
+.env, Artifacts/, logs/, final_model/, saved_models/,
+prediction_output/, *.egg-info/, the Atlas credentials file, and
+uvicorn.log — so no secrets and no runtime-generated junk ever get
+committed. Network_Data/phisingData.csv (the raw dataset, ~789KB)
+IS tracked, same as the original project.
+
+This repo is also the prerequisite for the CI/CD phase — GitHub
+Actions workflows live in .github/workflows/ in this same repo and
+trigger automatically on push (see the CI/CD chain writeup in
+section 9).
+
+
+----------------------------------------------------------------
+12. NOT YET DONE (planned next, time permitting)
 ----------------------------------------------------------------
 - AWS: account created (from zero), region ap-south-1 (Mumbai),
   verification pending as of 2026-09-12 (paid via UPI, ~1.5 day
