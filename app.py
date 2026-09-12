@@ -6,6 +6,14 @@ import sys
 import threading
 from dataclasses import asdict
 
+# MLflow prints emoji (e.g. running-person) after logging a run; Windows' default
+# console encoding (cp1252) can't encode those and crashes with UnicodeEncodeError,
+# leaving the remote run stuck in "RUNNING" state. Force UTF-8 stdout/stderr so this
+# doesn't happen (Linux terminals, e.g. in Docker/EC2, default to UTF-8 already).
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 import pandas as pd
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, Request, UploadFile

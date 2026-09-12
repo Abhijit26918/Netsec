@@ -11,3 +11,4 @@ prediction_output/
 atlas-credentials (1).env
 uvicorn.log
 notes.txt
+debug_journal.txt

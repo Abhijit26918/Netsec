@@ -35,6 +35,7 @@ Model Training       — GridSearchCV across 6 classifiers, best picked by accur
     ▼
 final_model/         — model.pkl + preprocessor.pkl
     │
+    ├──▶ MLflow (via Dagshub)  — every run's params/metrics/model logged & comparable
     ▼
 FastAPI + Dashboard  — live training progress, model comparison, predictions
 ```
@@ -55,6 +56,14 @@ Six classifiers are trained and compared via `GridSearchCV` (3-fold CV): Random 
 Final model test set: F1 = 0.973, Precision = 0.964, Recall = 0.983.
 
 XGBoost can be toggled out of the comparison via a single flag (`INCLUDE_XGBOOST` in `networksecurity/components/model_trainer.py`) without touching any other code.
+
+(Model rankings shift slightly run to run — GridSearchCV and the train/test split both have randomness — so don't read a <1% gap between the top two as decisive.)
+
+## Experiment tracking
+
+Every training run logs its params, metrics (every candidate model's accuracy, plus the winner's F1/precision/recall), and the trained model itself to [MLflow](https://mlflow.org/), hosted via [Dagshub](https://dagshub.com/) — unlike the dashboard's `/metrics` endpoint (which only ever shows the *latest* run), this keeps a full comparable history across every run. View it at: https://dagshub.com/Abhijit26918/Netsec.mlflow
+
+Tracking is optional by design — if `MLFLOW_TRACKING_URI` isn't configured, it's silently skipped and training proceeds normally.
 
 ## Dashboard
 
@@ -79,6 +88,7 @@ A custom-built dashboard (not just Swagger UI) at `/`:
 
 - **ML:** scikit-learn, XGBoost, pandas, numpy
 - **Data:** MongoDB Atlas
+- **Experiment tracking:** MLflow (hosted via Dagshub)
 - **Serving:** FastAPI, Server-Sent Events
 - **Packaging:** Docker (non-root user, layered for build-cache efficiency)
 - **Planned:** AWS S3 (artifact storage), GitHub Actions → ECR → EC2 (CI/CD)

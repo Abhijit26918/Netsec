@@ -5,6 +5,7 @@ pymongo[srv]
 certifi
 scikit-learn
 xgboost
+mlflow
 pyyaml
 fastapi
 uvicorn
