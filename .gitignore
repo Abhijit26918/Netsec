@@ -10,3 +10,4 @@ prediction_output/
 *.egg-info/
 atlas-credentials (1).env
 uvicorn.log
+notes.txt
