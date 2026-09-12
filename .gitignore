@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+.env
+Artifacts/
+logs/
+final_model/
+saved_models/
+prediction_output/
+*.egg-info/
+atlas-credentials (1).env
+uvicorn.log
